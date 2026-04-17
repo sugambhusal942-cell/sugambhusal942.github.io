@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sugam Bhusal | Creative Learner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--accent:#7c6fff;--accent2:#a78bfa;--accent3:#f472b6;--text:#e8e8f0;--muted:#8888a8;--border:#22223a;--card:rgba(16,16,30,0.88);}
+html{scroll-behavior:smooth;}
+body{background:#07070f;color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;overflow-x:hidden;}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,7,15,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 2rem;}
+.logo-nav{display:flex;align-items:center;gap:10px;}
+.logo-3d{width:36px;height:36px;position:relative;transform-style:preserve-3d;animation:spin3d 6s linear infinite;}
+@keyframes spin3d{from{transform:rotateY(0) rotateX(15deg);}to{transform:rotateY(360deg) rotateX(15deg);}}
+.lf{position:absolute;inset:0;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;}
+.lfront{background:linear-gradient(135deg,#7c6fff,#a855f7);transform:translateZ(18px);}
+.lback{background:linear-gradient(135deg,#f472b6,#a855f7);transform:rotateY(180deg) translateZ(18px);}
+.lright{background:linear-gradient(135deg,#a855f7,#7c6fff);transform:rotateY(90deg) translateZ(18px);font-size:9px;}
+.lleft{background:linear-gradient(135deg,#7c6fff,#f472b6);transform:rotateY(-90deg) translateZ(18px);font-size:9px;}
+.logo-text{font-weight:700;font-size:1.1rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.88rem;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent3));transition:width .3s;border-radius:2px;}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{width:100%;}
+
+section{padding:110px 2rem;position:relative;z-index:1;}
+.container{max-width:1100px;margin:auto;}
+
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:60px;}
+.hero-wrap{display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center;}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,111,255,.12);border:1px solid rgba(124,111,255,.3);border-radius:20px;padding:5px 14px;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);margin-bottom:1.5rem;}
+.dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+h1.ht{font-size:clamp(2.4rem,5vw,4.5rem);font-weight:900;line-height:1.05;margin-bottom:1.2rem;}
+.grad{background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:500px;margin-bottom:2rem;}
+.srv-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2.5rem;}
+.srv{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:5px 14px;font-size:.8rem;color:var(--muted);transition:all .3s;cursor:default;}
+.srv:hover{border-color:var(--accent);color:var(--accent2);transform:translateY(-2px);}
+.btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.92rem;transition:all .3s;box-shadow:0 0 30px rgba(124,111,255,.3);}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(124,111,255,.5);}
+.btn-o{background:transparent;border:1px solid var(--border);color:var(--text);padding:12px 28px;border-radius:8px;text-decoration:none;font-size:.92rem;transition:all .3s;}
+.btn-o:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px);}
+
+.cube-scene{width:200px;height:200px;perspective:600px;flex-shrink:0;}
+.cube{width:120px;height:120px;position:relative;transform-style:preserve-3d;animation:rotateCube 8s linear infinite;margin:40px auto;}
+@keyframes rotateCube{from{transform:rotateX(20deg) rotateY(0);}to{transform:rotateX(20deg) rotateY(360deg);}}
+.face{position:absolute;width:120px;height:120px;border:1px solid rgba(124,111,255,.45);display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:900;}
+.front{background:rgba(124,111,255,.15);transform:translateZ(60px);}
+.back{background:rgba(244,114,182,.12);transform:rotateY(180deg) translateZ(60px);}
+.right{background:rgba(168,85,247,.12);transform:rotateY(90deg) translateZ(60px);}
+.left{background:rgba(124,111,255,.12);transform:rotateY(-90deg) translateZ(60px);}
+.top{background:rgba(244,114,182,.08);transform:rotateX(90deg) translateZ(60px);}
+.bottom{background:rgba(124,111,255,.08);transform:rotateX(-90deg) translateZ(60px);}
+.ft{background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+#about{background:rgba(15,15,26,.7);backdrop-filter:blur(2px);}
+.sec-label{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;}
+.sec-title{font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;margin-bottom:1.5rem;}
+.about-grid{display:grid;grid-template-columns:260px 1fr;gap:4rem;align-items:start;}
+.avatar-3d{width:220px;height:260px;border-radius:20px;background:linear-gradient(135deg,rgba(124,111,255,.2),rgba(244,114,182,.15));border:1px solid rgba(124,111,255,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;transform:rotateY(-10deg) rotateX(5deg);transition:transform .5s;box-shadow:20px 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
+.avatar-3d::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent,rgba(124,111,255,.1),transparent 30%);animation:shine 4s linear infinite;}
+@keyframes shine{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.avatar-3d:hover{transform:rotateY(10deg) rotateX(-5deg);}
+.av-init{font-size:5rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:1;}
+.av-name{font-size:.9rem;font-weight:700;color:var(--accent2);position:relative;z-index:1;}
+.about-p{color:var(--muted);margin-bottom:1rem;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:1.2rem 0;}
+.tag{background:rgba(124,111,255,.1);border:1px solid rgba(124,111,255,.22);color:var(--accent2);border-radius:6px;padding:4px 12px;font-size:.8rem;transition:all .3s;}
+.tag:hover{background:rgba(124,111,255,.25);transform:translateY(-2px);}
+.stats{display:flex;gap:2.5rem;margin-top:1.5rem;}
+.sn{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.5rem;margin-top:3rem;}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:all .4s cubic-bezier(.23,1,.32,1);backdrop-filter:blur(10px);cursor:pointer;}
+.pcard:hover{transform:translateY(-10px) rotateX(3deg);border-color:var(--accent);box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 40px rgba(124,111,255,.2);}
+.pcard-preview{width:100%;height:180px;position:relative;overflow:hidden;background:#0a0a14;}
+.pcard-preview svg{width:100%;height:100%;transition:transform .4s;}
+.pcard:hover .pcard-preview svg{transform:scale(1.04);}
+.pcard-overlay{position:absolute;inset:0;background:rgba(10,10,30,.7);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;backdrop-filter:blur(3px);}
+.pcard:hover .pcard-overlay{opacity:1;}
+.view-btn{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;padding:10px 26px;border-radius:20px;font-size:.85rem;font-weight:700;border:none;cursor:pointer;}
+.pcard-body{padding:1.4rem;}
+.pcard-title{font-weight:700;font-size:1rem;margin-bottom:.4rem;}
+.pcard-desc{color:var(--muted);font-size:.87rem;margin-bottom:1.1rem;}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;}
+.pt{background:rgba(255,255,255,.05);color:var(--muted);border-radius:4px;padding:2px 9px;font-size:.73rem;border:1px solid var(--border);}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:#0f0f1a;border:1px solid var(--border);border-radius:20px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-weight:700;font-size:1.05rem;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.modal-close{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.modal-close:hover{border-color:var(--accent3);color:var(--accent3);}
+.modal-body{padding:1.5rem;}
+
+/* GAME */
+#gameCanvas{display:block;margin:0 auto;border:1px solid var(--border);border-radius:10px;background:#07070f;}
+.game-ui{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.game-score{font-weight:700;color:var(--accent2);font-size:1rem;}
+.game-hint{color:var(--muted);font-size:.78rem;}
+.game-btn{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;border:none;padding:7px 20px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.85rem;}
+
+/* LOGOS */
+.logo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.logo-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;transition:all .3s;}
+.logo-item:hover{border-color:var(--accent);transform:translateY(-3px);}
+.logo-label{color:var(--muted);font-size:.8rem;text-align:center;}
+
+/* CARD DEMO */
+.card-demo{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;}
+.bcard{width:300px;height:160px;border-radius:14px;position:relative;overflow:hidden;flex-shrink:0;}
+.bcard-front{background:linear-gradient(135deg,#0f0f1a,#1a1a2e);border:1px solid var(--border);}
+.bcard-back{background:linear-gradient(135deg,#7c6fff,#f472b6);}
+.bcard svg{width:100%;height:100%;}
+
+/* ADS */
+.ads-row{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;}
+
+/* STUDY APP */
+.study-app{background:#0f0f1a;border-radius:16px;padding:2rem;max-width:380px;margin:auto;text-align:center;}
+.timer-ring{position:relative;display:inline-block;margin:1rem 0;}
+.timer-label{font-size:2.2rem;font-weight:900;color:var(--text);}
+.timer-sub{font-size:.75rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.subject-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:1rem 0;}
+.sub-chip{padding:5px 14px;border-radius:20px;font-size:.8rem;cursor:pointer;transition:all .2s;border:1px solid var(--border);color:var(--muted);}
+.sub-chip.active{background:rgba(124,111,255,.2);border-color:var(--accent);color:var(--accent2);}
+.study-btns{display:flex;gap:10px;justify-content:center;margin-top:1rem;}
+.sbtn2{padding:9px 22px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:.88rem;transition:all .2s;}
+.sbtn2.primary{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;}
+.sbtn2.sec{background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border);}
+
+.gh-banner{background:linear-gradient(135deg,rgba(124,111,255,.15),rgba(244,114,182,.1));border:1px solid rgba(124,111,255,.3);border-radius:16px;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-top:3rem;flex-wrap:wrap;backdrop-filter:blur(10px);}
+.gh-text h3{font-size:1.1rem;font-weight:700;margin-bottom:.3rem;}
+.gh-text p{color:var(--muted);font-size:.88rem;}
+.gh-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#000;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.88rem;transition:all .3s;}
+.gh-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,255,255,.15);}
+
+#contact{background:rgba(15,15,26,.7);backdrop-filter:blur(2px);}
+.cbox{background:rgba(16,16,30,.9);border:1px solid var(--border);border-radius:20px;padding:2.5rem;max-width:640px;margin:3rem auto 0;backdrop-filter:blur(20px);}
+label{display:block;color:var(--muted);font-size:.83rem;margin-bottom:.4rem;}
+input,textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:.92rem;outline:none;font-family:inherit;transition:all .3s;margin-bottom:1rem;}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(124,111,255,.15);}
+textarea{resize:vertical;min-height:100px;}
+.sbtn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;border:none;padding:13px;border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .3s;}
+.sbtn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(124,111,255,.4);}
+.social-row{display:flex;justify-content:center;gap:1.5rem;margin-top:2rem;flex-wrap:wrap;}
+.slink{color:var(--muted);text-decoration:none;font-size:.88rem;transition:all .3s;padding:8px 16px;border-radius:8px;border:1px solid var(--border);}
+.slink:hover{color:var(--accent2);border-color:var(--accent);transform:translateY(-2px);}
+footer{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border);position:relative;z-index:1;}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s,transform .7s;}
+.reveal.show{opacity:1;transform:translateY(0);}
+.reveal-l{opacity:0;transform:translateX(-40px);transition:opacity .7s,transform .7s;}
+.reveal-l.show{opacity:1;transform:translateX(0);}
+.reveal-r{opacity:0;transform:translateX(40px);transition:opacity .7s,transform .7s;}
+.reveal-r.show{opacity:1;transform:translateX(0);}
+@media(max-width:700px){.hero-wrap,.about-grid{grid-template-columns:1fr;}.cube-scene{display:none;}.avatar-3d{margin:auto;}.stats{gap:1.2rem;}.nav-links{gap:1rem;}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Project</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo-nav">
+      <div class="logo-3d" style="transform-style:preserve-3d">
+        <div class="lf lfront">S</div><div class="lf lback">B</div>
+        <div class="lf lright">SB</div><div class="lf lleft">SB</div>
+      </div>
+      <span class="logo-text">Sugam Bhusal</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li><li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li><li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="container">
+    <div class="hero-wrap">
+      <div class="reveal">
+        <div class="badge"><span class="dot"></span> Available for projects</div>
+        <h1 class="ht">Hi, I'm<br/><span class="grad">Sugam</span><br/>Creative Learner<br/>&amp; Builder.</h1>
+        <p class="hero-sub">I build websites, apps, games, logos, templates &amp; ads — turning ideas into real digital experiences.</p>
+        <div class="srv-row">
+          <span class="srv">🌐 Websites</span><span class="srv">📱 Apps</span><span class="srv">🎮 Games</span>
+          <span class="srv">📋 Templates</span><span class="srv">✨ Logos</span><span class="srv">📢 Ads</span>
+        </div>
+        <div class="btns">
+          <a href="#projects" class="btn">View My Work</a>
+          <a href="https://github.com/sugambhusal942" target="_blank" class="btn-o">GitHub</a>
+        </div>
+      </div>
+      <div class="cube-scene reveal-r">
+        <div class="cube">
+          <div class="face front"><span class="ft">S</span></div>
+          <div class="face back"><span class="ft">B</span></div>
+          <div class="face right"><span class="ft" style="font-size:.85rem">DEV</span></div>
+          <div class="face left"><span class="ft" style="font-size:.85rem">ART</span></div>
+          <div class="face top"><span class="ft" style="font-size:.7rem">CODE</span></div>
+          <div class="face bottom"><span class="ft" style="font-size:.7rem">BUILD</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal-l">
+        <div class="avatar-3d">
+          <span class="av-init">SB</span>
+          <span class="av-name">Sugam Bhusal</span>
+        </div>
+      </div>
+      <div class="reveal-r">
+        <div class="sec-label">About Me</div>
+        <h2 class="sec-title">Creative Learner &amp; Digital Creator</h2>
+        <p class="about-p">I'm Sugam Bhusal — a passionate creative learner who loves building digital things. From websites and apps to games, logos, templates and ads, I take on challenges that push my skills every day.</p>
+        <p class="about-p">Learning by doing is my philosophy. Every project is a new lesson. Got an idea? Let's build it together.</p>
+        <div class="tags">
+          <span class="tag">Web Design</span><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span>
+          <span class="tag">Logo Design</span><span class="tag">Game Dev</span><span class="tag">Ad Creatives</span>
+        </div>
+        <div class="stats">
+          <div><div class="sn">6+</div><div class="sl">Services</div></div>
+          <div><div class="sn">10+</div><div class="sl">Projects</div></div>
+          <div><div class="sn">∞</div><div class="sl">Curiosity</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <div class="sec-label" style="display:flex;justify-content:center">My Work</div>
+      <h2 class="sec-title">Projects I've Built</h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:-.5rem">Click any project to see the live demo 👇</p>
+    </div>
+    <div class="proj-grid">
+
+      <div class="pcard reveal" onclick="openProject('portfolio')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#07070f"/>
+            <rect width="360" height="28" fill="#0f0f1a"/>
+            <circle cx="16" cy="14" r="5" fill="#ff5f57"/><circle cx="30" cy="14" r="5" fill="#ffbd2e"/><circle cx="44" cy="14" r="5" fill="#28c840"/>
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+            <rect x="30" y="50" width="160" height="10" rx="5" fill="url(#g1)"/>
+            <rect x="30" y="68" width="120" height="7" rx="3" fill="#22223a"/>
+            <rect x="30" y="83" width="90" height="7" rx="3" fill="#22223a"/>
+            <rect x="30" y="105" width="70" height="22" rx="8" fill="url(#g1)"/>
+            <rect x="220" y="45" width="110" height="110" rx="14" fill="#13131c" stroke="#22223a" stroke-width="1"/>
+            <circle cx="275" cy="85" r="24" fill="url(#g1)" opacity=".3"/>
+            <text x="275" y="91" text-anchor="middle" font-family="Segoe UI" font-size="22" font-weight="800" fill="white">S</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ Live Preview</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">🌐 Dark Portfolio Website</div>
+          <div class="pcard-desc">Sleek dark-mode portfolio with smooth animations and gradient accents built from scratch.</div>
+          <div class="ptags"><span class="pt">HTML</span><span class="pt">CSS</span><span class="pt">JavaScript</span></div>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="openProject('logos')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#0f0f1a"/>
+            <defs>
+              <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
+              <linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f472b6"/><stop offset="1" stop-color="#fb923c"/></linearGradient>
+              <linearGradient id="lg4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+              <linearGradient id="lg5" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+            </defs>
+            <rect x="22" y="22" width="72" height="72" rx="14" fill="url(#lg2)"/><text x="58" y="66" text-anchor="middle" font-family="Segoe UI" font-size="28" font-weight="900" fill="white">S</text><circle cx="80" cy="34" r="9" fill="#f472b6"/>
+            <rect x="108" y="22" width="72" height="72" rx="36" fill="url(#lg3)"/><text x="144" y="64" text-anchor="middle" font-family="Segoe UI" font-size="22" font-weight="900" fill="white">SB</text>
+            <rect x="196" y="22" width="72" height="72" rx="14" fill="#13131c" stroke="#22223a" stroke-width="1.5"/><polygon points="232,34 258,70 206,70" fill="url(#lg4)"/><text x="232" y="67" text-anchor="middle" font-family="Segoe UI" font-size="9" font-weight="700" fill="white">SB</text>
+            <rect x="284" y="22" width="54" height="72" rx="14" fill="url(#lg5)"/><text x="311" y="65" text-anchor="middle" font-family="Segoe UI" font-size="22" font-weight="900" fill="white">S</text>
+            <text x="180" y="140" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#8888a8">Brand Logo Collection</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ View Logos</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">✨ Brand Logo Collection</div>
+          <div class="pcard-desc">4 unique logo styles — gradient, badge, geometric and minimal lettermark designs.</div>
+          <div class="ptags"><span class="pt">SVG</span><span class="pt">Logo Design</span><span class="pt">Branding</span></div>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="openProject('game')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#07070f"/>
+            <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+            <text x="180" y="30" text-anchor="middle" font-family="Segoe UI" font-size="11" font-weight="700" fill="#a78bfa">🎮 SPACE SHOOTER — CLICK TO PLAY</text>
+            <rect x="50" y="55" width="28" height="18" rx="5" fill="#ff4466"/><rect x="120" y="42" width="28" height="18" rx="5" fill="#ff4466"/><rect x="200" y="50" width="28" height="18" rx="5" fill="#ff4466"/><rect x="270" y="38" width="28" height="18" rx="5" fill="#ff4466"/>
+            <polygon points="180,140 165,162 195,162" fill="url(#gg)"/>
+            <rect x="178" y="110" width="4" height="32" rx="2" fill="#f472b6"/>
+            <circle cx="134" cy="51" r="16" fill="#fb923c" opacity=".25"/>
+            <circle cx="134" cy="51" r="8" fill="#fbbf24" opacity=".4"/>
+            <text x="180" y="175" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#8888a8">← → to move  |  SPACE to shoot</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ Play Game</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">🎮 Space Shooter Game</div>
+          <div class="pcard-desc">A fully playable browser arcade shooter — click to open and play right now!</div>
+          <div class="ptags"><span class="pt">JavaScript</span><span class="pt">Canvas</span><span class="pt">Game Dev</span></div>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="openProject('card')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#16162a"/>
+            <defs>
+              <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+              <linearGradient id="cb" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0f0f1a"/><stop offset="1" stop-color="#1a1a2e"/></linearGradient>
+            </defs>
+            <rect x="18" y="28" width="188" height="108" rx="10" fill="url(#cb)" stroke="#22223a" stroke-width="1"/>
+            <rect x="18" y="28" width="58" height="108" rx="10" fill="url(#cg)"/>
+            <text x="47" y="86" text-anchor="middle" font-family="Segoe UI" font-size="22" font-weight="900" fill="white">S</text>
+            <text x="118" y="60" font-family="Segoe UI" font-size="11" font-weight="700" fill="white">Sugam Bhusal</text>
+            <text x="118" y="74" font-family="Segoe UI" font-size="8" fill="#a78bfa">Creative Learner</text>
+            <text x="118" y="95" font-family="Segoe UI" font-size="7.5" fill="#8888a8">sugambhusal942@gmail.com</text>
+            <text x="118" y="108" font-family="Segoe UI" font-size="7.5" fill="#8888a8">📞 9702304650</text>
+            <rect x="158" y="52" width="170" height="108" rx="10" fill="url(#cg)"/>
+            <text x="243" y="106" text-anchor="middle" font-family="Segoe UI" font-size="30" font-weight="900" fill="white" opacity=".12">SB</text>
+            <text x="243" y="100" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="700" fill="white">sugambhusal942</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ View Card</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">📋 Business Card Template</div>
+          <div class="pcard-desc">Professional double-sided business card with gradient accents. Print-ready design.</div>
+          <div class="ptags"><span class="pt">SVG</span><span class="pt">Print Design</span><span class="pt">Template</span></div>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="openProject('ads')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#0a0a0f"/>
+            <defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+            <rect x="15" y="10" width="148" height="162" rx="14" fill="#0f0f1a" stroke="#22223a" stroke-width="1"/>
+            <rect x="15" y="58" width="148" height="80" fill="url(#ag)"/>
+            <text x="89" y="92" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="800" fill="white">Need a Website?</text>
+            <rect x="54" y="115" width="70" height="14" rx="6" fill="white"/>
+            <text x="89" y="125" text-anchor="middle" font-family="Segoe UI" font-size="8" font-weight="700" fill="#7c6fff">Hire Sugam →</text>
+            <rect x="178" y="10" width="165" height="162" rx="14" fill="#0f0f1a" stroke="#22223a" stroke-width="1"/>
+            <rect x="190" y="20" width="141" height="72" rx="8" fill="url(#ag)"/>
+            <text x="260" y="52" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="800" fill="white">Creative Logos</text>
+            <rect x="190" y="120" width="60" height="20" rx="6" fill="url(#ag)"/>
+            <text x="220" y="133" text-anchor="middle" font-family="Segoe UI" font-size="8" font-weight="600" fill="white">Order Now</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ View Ads</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">📢 Social Media Ad Set</div>
+          <div class="pcard-desc">Instagram &amp; Facebook ad banners with strong CTAs and mobile-optimised layouts.</div>
+          <div class="ptags"><span class="pt">Ad Design</span><span class="pt">Instagram</span><span class="pt">Facebook</span></div>
+        </div>
+      </div>
+
+      <div class="pcard reveal" onclick="openProject('study')">
+        <div class="pcard-preview">
+          <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="360" height="180" fill="#07070f"/>
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+            <rect x="100" y="5" width="160" height="172" rx="22" fill="#0f0f1a" stroke="#22223a" stroke-width="1.5"/>
+            <rect x="100" y="25" width="160" height="35" fill="#13131c"/>
+            <text x="180" y="40" text-anchor="middle" font-family="Segoe UI" font-size="11" font-weight="700" fill="white">Study Planner</text>
+            <circle cx="180" cy="100" r="35" fill="none" stroke="#22223a" stroke-width="5"/>
+            <circle cx="180" cy="100" r="35" fill="none" stroke="url(#sg)" stroke-width="5" stroke-dasharray="165 55" stroke-linecap="round" transform="rotate(-90 180 100)"/>
+            <text x="180" y="96" text-anchor="middle" font-family="Segoe UI" font-size="16" font-weight="800" fill="white">25:00</text>
+            <text x="180" y="110" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#8888a8">CLICK TO START</text>
+          </svg>
+          <div class="pcard-overlay"><button class="view-btn">▶ Open App</button></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-title">📱 Study Planner App</div>
+          <div class="pcard-desc">A working pomodoro timer app with subject selector and session tracking.</div>
+          <div class="ptags"><span class="pt">JavaScript</span><span class="pt">App UI</span><span class="pt">Interactive</span></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="gh-banner reveal">
+      <div class="gh-text">
+        <h3>All projects live on GitHub</h3>
+        <p>Star your favourites and follow my learning journey.</p>
+      </div>
+      <a href="https://github.com/sugambhusal942" target="_blank" class="gh-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.09.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        github.com/sugambhusal942
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <div class="sec-label" style="display:flex;justify-content:center">Contact</div>
+      <h2 class="sec-title">Let's Build Something</h2>
+      <p style="color:var(--muted);max-width:460px;margin:auto">Need a website, logo, app, game, template or ad? I'm ready!</p>
+    </div>
+    <div class="cbox reveal">
+      <label>Your Name</label><input type="text" placeholder="e.g. Riya Sharma"/>
+      <label>Email</label><input type="email" placeholder="you@example.com"/>
+      <label>What do you need?</label>
+      <textarea placeholder="Tell me about your project..."></textarea>
+      <button class="sbtn" onclick="this.textContent='Message Sent! ✓';this.style.background='#22c55e';">Send Message</button>
+    </div>
+    <div class="social-row reveal">
+      <a href="mailto:sugambhusal942@gmail.com" class="slink">📧 sugambhusal942@gmail.com</a>
+      <a href="tel:+9779702304650" class="slink">📞 9702304650</a>
+      <a href="https://github.com/sugambhusal942" target="_blank" class="slink">💻 GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed &amp; Built by <strong>Sugam Bhusal</strong> · Creative Learner · 2025 ·
+  <a href="https://github.com/sugambhusal942" target="_blank" style="color:var(--accent2);text-decoration:none">GitHub ↗</a></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── THREE.JS BG ──
+const cv=document.getElementById('bg-canvas');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,200);
+camera.position.z=30;
+const pGeo=new THREE.BufferGeometry(), pPos=new Float32Array(1800*3);
+for(let i=0;i<1800*3;i++) pPos[i]=(Math.random()-.5)*120;
+pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x7c6fff,size:.18,transparent:true,opacity:.7})));
+const shapes=[], geos=[new THREE.IcosahedronGeometry(1.2,0),new THREE.OctahedronGeometry(1.1,0),new THREE.TorusGeometry(.8,.3,8,16),new THREE.TetrahedronGeometry(1.1,0)];
+const cols=[0x7c6fff,0xa78bfa,0xf472b6,0xa855f7,0x818cf8];
+for(let i=0;i<14;i++){
+  const m=new THREE.Mesh(geos[i%geos.length],new THREE.MeshBasicMaterial({color:cols[i%cols.length],wireframe:true,transparent:true,opacity:.22}));
+  m.position.set((Math.random()-.5)*50,(Math.random()-.5)*40,(Math.random()-.5)*20-5);
+  m.userData={rx:(Math.random()-.5)*.008,ry:(Math.random()-.5)*.012,orig:m.position.y};
+  scene.add(m); shapes.push(m);
+}
+let mouse={x:0,y:0}, t=0;
+document.addEventListener('mousemove',e=>{mouse.x=(e.clientX/window.innerWidth-.5)*.5;mouse.y=(e.clientY/window.innerHeight-.5)*.5;});
+(function anim(){requestAnimationFrame(anim);t+=.008;
+  shapes.forEach(m=>{m.rotation.x+=m.userData.rx;m.rotation.y+=m.userData.ry;m.position.y=m.userData.orig+Math.sin(t+m.position.x*.1)*1.2;});
+  camera.position.x+=(mouse.x*3-camera.position.x)*.03;
+  camera.position.y+=(-mouse.y*2-camera.position.y)*.03;
+  camera.lookAt(scene.position); renderer.render(scene,camera);
+})();
+window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('show');}),{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>obs.observe(el));
+
+// ── MODAL ──
+let gameLoop=null;
+function openModal(title,html){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  if(gameLoop){clearInterval(gameLoop);gameLoop=null;}
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-body').innerHTML='';
+  document.body.style.overflow='';
+}
+
+// ── PROJECTS ──
+function openProject(id){
+  if(id==='portfolio') openModal('🌐 Dark Portfolio Website',`
+    <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">A responsive dark-mode portfolio website built with pure HTML, CSS and JavaScript — featuring animated hero, sticky nav, project cards and contact form.</p>
+    <div style="background:#07070f;border:1px solid #22223a;border-radius:12px;overflow:hidden;">
+      <div style="background:#0f0f1a;padding:8px 14px;display:flex;gap:6px;align-items:center">
+        <span style="width:10px;height:10px;border-radius:50%;background:#ff5f57;display:inline-block"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#ffbd2e;display:inline-block"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#28c840;display:inline-block"></span>
+        <span style="flex:1;background:#1a1a2e;border-radius:6px;height:20px;margin-left:8px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#8888a8">sugambhusal.com</span>
+      </div>
+      <div style="padding:2rem;text-align:center">
+        <div style="display:inline-block;background:rgba(124,111,255,.1);border:1px solid rgba(124,111,255,.3);border-radius:20px;padding:4px 14px;font-size:.75rem;color:#a78bfa;margin-bottom:1rem">✨ Always Learning</div>
+        <h2 style="font-size:2rem;font-weight:900;background:linear-gradient(135deg,#7c6fff,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Hi, I'm Sugam<br/>Creative Learner</h2>
+        <p style="color:#8888a8;margin:1rem 0 1.5rem;font-size:.9rem">I build websites, apps, games, logos, templates & ads.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <span style="background:linear-gradient(135deg,#7c6fff,#f472b6);color:#fff;padding:8px 20px;border-radius:8px;font-size:.85rem;font-weight:700">View My Work</span>
+          <span style="border:1px solid #22223a;color:#e8e8f0;padding:8px 20px;border-radius:8px;font-size:.85rem">Contact Me</span>
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:.8rem;margin-top:1rem;text-align:center">Built with HTML · CSS · JavaScript — fully responsive</p>`);
+
+  if(id==='logos') openModal('✨ Brand Logo Collection',`
+    <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">4 unique logo styles designed for creative learners and small brands. Each logo is fully scalable SVG.</p>
+    <div class="logo-grid">
+      <div class="logo-item">
+        <svg width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="url(#l1)"/><text x="50" y="66" text-anchor="middle" font-family="Segoe UI" font-size="46" font-weight="900" fill="white">S</text><circle cx="78" cy="24" r="14" fill="#f472b6"/><circle cx="78" cy="24" r="8" fill="white" opacity=".3"/><defs><linearGradient id="l1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+        <span class="logo-label">Gradient Square Mark</span>
+      </div>
+      <div class="logo-item">
+        <svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="url(#l2)"/><text x="50" y="58" text-anchor="middle" font-family="Segoe UI" font-size="28" font-weight="900" fill="white">SB</text><defs><linearGradient id="l2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f472b6"/><stop offset="1" stop-color="#fb923c"/></linearGradient></defs></svg>
+        <span class="logo-label">Circle Badge Logo</span>
+      </div>
+      <div class="logo-item">
+        <svg width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" rx="10" fill="#13131c" stroke="#22223a" stroke-width="1.5"/><polygon points="50,14 90,80 10,80" fill="url(#l3)" opacity=".95"/><text x="50" y="74" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="800" fill="white">SB</text><defs><linearGradient id="l3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs></svg>
+        <span class="logo-label">Geometric Triangle</span>
+      </div>
+      <div class="logo-item">
+        <svg width="100" height="100" viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" rx="12" fill="url(#l4)"/><text x="50" y="65" text-anchor="middle" font-family="Segoe UI" font-size="42" font-weight="900" fill="white" opacity=".2">S</text><text x="50" y="62" text-anchor="middle" font-family="Segoe UI" font-size="38" font-weight="900" fill="white">S</text><defs><linearGradient id="l4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4ade80"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>
+        <span class="logo-label">Minimal Lettermark</span>
+      </div>
+    </div>`);
+
+  if(id==='game') openModal('🎮 Space Shooter Game',`
+    <div class="game-ui">
+      <div>
+        <span class="game-score">Score: <span id="gScore">0</span></span> &nbsp;
+        <span style="color:#f472b6;font-weight:700">Lives: <span id="gLives">3</span></span>
+      </div>
+      <span class="game-hint">← → Arrow keys or A/D to move · SPACE to shoot</span>
+      <button class="game-btn" onclick="startGame()">▶ Start / Restart</button>
+    </div>
+    <canvas id="gameCanvas" width="600" height="380" style="max-width:100%"></canvas>
+    <p style="color:var(--muted);font-size:.78rem;text-align:center;margin-top:.75rem">Press Start then use arrow keys + spacebar. Mobile: tap left/right sides to move, center to shoot.</p>`,()=>setupGame());
+
+  if(id==='card') openModal('📋 Business Card — Front & Back',`
+    <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">Print-ready double-sided business card. Hover each card to see the flip effect.</p>
+    <div class="card-demo">
+      <div style="perspective:800px">
+        <div style="width:310px;height:170px;position:relative;transform-style:preserve-3d;transition:transform .6s;cursor:pointer" onmouseenter="this.style.transform='rotateY(180deg)'" onmouseleave="this.style.transform='rotateY(0)'">
+          <div style="position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;background:linear-gradient(135deg,#0f0f1a,#1a1a2e);border:1px solid #22223a;overflow:hidden">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:65px;background:linear-gradient(135deg,#7c6fff,#f472b6);display:flex;align-items:center;justify-content:center">
+              <span style="font-size:2rem;font-weight:900;color:white">S</span>
+            </div>
+            <div style="padding:20px 20px 20px 82px">
+              <div style="font-weight:700;font-size:1rem;color:white">Sugam Bhusal</div>
+              <div style="font-size:.78rem;color:#a78bfa;margin-bottom:8px">Creative Learner & Builder</div>
+              <div style="font-size:.72rem;color:#8888a8">sugambhusal942@gmail.com</div>
+              <div style="font-size:.72rem;color:#8888a8">📞 9702304650</div>
+              <div style="font-size:.72rem;color:#8888a8">github.com/sugambhusal942</div>
+            </div>
+          </div>
+          <div style="position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);border-radius:14px;background:linear-gradient(135deg,#7c6fff,#f472b6);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden">
+            <div style="font-size:4rem;font-weight:900;color:rgba(255,255,255,.12);position:absolute">SB</div>
+            <div style="font-size:1rem;font-weight:700;color:white;position:relative">sugambhusal942</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.7);position:relative">Creative Learner</div>
+          </div>
+        </div>
+        <p style="color:var(--muted);font-size:.75rem;text-align:center;margin-top:.5rem">Hover to flip</p>
+      </div>
+    </div>`);
+
+  if(id==='ads') openModal('📢 Social Media Ad Set',`
+    <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.9rem">Animated Instagram & Facebook ad banners designed to drive clicks and engagement.</p>
+    <div class="ads-row">
+      <div style="width:220px;background:linear-gradient(135deg,#7c6fff,#f472b6);border-radius:16px;overflow:hidden;flex-shrink:0">
+        <div style="padding:14px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.2)">
+          <div style="width:28px;height:28px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#7c6fff">S</div>
+          <div><div style="font-size:.75rem;font-weight:700;color:white">sugambhusal942</div><div style="font-size:.65rem;color:rgba(255,255,255,.7)">Sponsored</div></div>
+        </div>
+        <div style="padding:2rem 1.2rem;text-align:center">
+          <div style="font-size:1.4rem;font-weight:900;color:white;line-height:1.2;margin-bottom:.5rem">Need a Website?</div>
+          <div style="font-size:.8rem;color:rgba(255,255,255,.85);margin-bottom:1.2rem">Built fast. Looks amazing. Affordable price.</div>
+          <div style="background:white;color:#7c6fff;border-radius:20px;padding:8px 22px;font-weight:700;font-size:.85rem;display:inline-block">Hire Sugam →</div>
+        </div>
+        <div style="padding:.7rem;display:flex;justify-content:space-around;background:rgba(0,0,0,.2)">
+          <span style="font-size:.7rem;color:rgba(255,255,255,.7)">❤ 248</span>
+          <span style="font-size:.7rem;color:rgba(255,255,255,.7)">💬 31</span>
+          <span style="font-size:.7rem;color:rgba(255,255,255,.7)">↗ Share</span>
+        </div>
+      </div>
+      <div style="width:260px;background:#0f0f1a;border:1px solid #22223a;border-radius:12px;overflow:hidden;flex-shrink:0">
+        <div style="background:linear-gradient(135deg,#7c6fff,#f472b6);padding:1.5rem;text-align:center">
+          <div style="font-size:1.2rem;font-weight:900;color:white">Creative Logos</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.85);margin-top:.3rem">Stand out with a unique brand identity</div>
+        </div>
+        <div style="padding:1rem">
+          <div style="color:#8888a8;font-size:.82rem;margin-bottom:.8rem">Professional SVG logos designed just for you.</div>
+          <div style="background:linear-gradient(135deg,#7c6fff,#f472b6);color:white;border-radius:8px;padding:9px;text-align:center;font-weight:700;font-size:.85rem">Order Now</div>
+          <div style="color:#8888a8;font-size:.7rem;text-align:center;margin-top:.5rem">📢 Facebook Ad · Sponsored</div>
+        </div>
+      </div>
+    </div>`);
+
+  if(id==='study'){
+    openModal('📱 Study Planner App — Live',`
+      <div class="study-app">
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">Select subject:</div>
+        <div class="subject-row">
+          <span class="sub-chip active" onclick="selectSub(this,'Math')">📐 Math</span>
+          <span class="sub-chip" onclick="selectSub(this,'Science')">🔬 Science</span>
+          <span class="sub-chip" onclick="selectSub(this,'English')">📖 English</span>
+          <span class="sub-chip" onclick="selectSub(this,'Coding')">💻 Coding</span>
+        </div>
+        <div class="timer-ring">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="80" fill="none" stroke="#22223a" stroke-width="10"/>
+            <circle id="timerArc" cx="90" cy="90" r="80" fill="none" stroke="url(#tg)" stroke-width="10" stroke-dasharray="502 502" stroke-linecap="round" transform="rotate(-90 90 90)"/>
+            <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c6fff"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div class="timer-label" id="timerDisp">25:00</div>
+            <div class="timer-sub" id="timerMode">FOCUS</div>
+          </div>
+        </div>
+        <div style="color:var(--muted);font-size:.82rem;margin-bottom:.5rem">Sessions today: <span id="sessCount" style="color:var(--accent2);font-weight:700">0</span></div>
+        <div class="study-btns">
+          <button class="sbtn2 primary" id="startBtn" onclick="toggleTimer()">▶ Start</button>
+          <button class="sbtn2 sec" onclick="resetTimer()">↺ Reset</button>
+        </div>
+      </div>`);
+    initStudyTimer();
+  }
+}
+
+// ── STUDY TIMER ──
+let studyInterval=null, studyTime=1500, studyRunning=false, studySess=0, studySubject='Math';
+function selectSub(el,s){studySubject=s;document.querySelectorAll('.sub-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+function initStudyTimer(){studyTime=1500;studyRunning=false;updateTimerDisplay();}
+function toggleTimer(){
+  if(!studyRunning){
+    studyRunning=true;document.getElementById('startBtn').textContent='⏸ Pause';
+    studyInterval=setInterval(()=>{
+      studyTime--;updateTimerDisplay();
+      if(studyTime<=0){clearInterval(studyInterval);studyRunning=false;studySess++;
+        document.getElementById('sessCount').textContent=studySess;
+        document.getElementById('startBtn').textContent='▶ Start';
+        document.getElementById('timerMode').textContent='BREAK!';
+        studyTime=300;updateTimerDisplay();}
+    },1000);
+  } else {clearInterval(studyInterval);studyRunning=false;document.getElementById('startBtn').textContent='▶ Start';}
+}
+function resetTimer(){clearInterval(studyInterval);studyRunning=false;studyTime=1500;document.getElementById('startBtn').textContent='▶ Start';document.getElementById('timerMode').textContent='FOCUS';updateTimerDisplay();}
+function updateTimerDisplay(){
+  const m=Math.floor(studyTime/60), s=studyTime%60;
+  const el=document.getElementById('timerDisp'); if(el) el.textContent=m+':'+(s<10?'0':'')+s;
+  const arc=document.getElementById('timerArc'); if(arc){const total=studyTime>300?1500:300;arc.setAttribute('stroke-dasharray',(studyTime/total*502)+' 502');}
+}
+
+// ── GAME ──
+function setupGame(){setTimeout(startGame,100);}
+function startGame(){
+  const c=document.getElementById('gameCanvas'); if(!c)return;
+  const ctx=c.getContext('2d'), W=c.width, H=c.height;
+  let score=0,lives=3,bullets=[],enemies=[],particles2=[],keys={},eid=0;
+  let px=W/2, pSpeed=5, shootCooldown=0, gameOver=false, started=true;
+  const P_W=36,P_H=28;
+  function spawnEnemy(){enemies.push({x:30+Math.random()*(W-60),y:-20,w:32,h:22,speed:1+score/300,hp:1,id:eid++});}
+  let eTimer=0;
+  document.onkeydown=e=>{keys[e.key]=true;if(e.key===' '){e.preventDefault();}};
+  document.onkeyup=e=>{keys[e.key]=false;};
+  // touch controls
+  c.ontouchstart=e=>{const t=e.touches[0]; const bx=c.getBoundingClientRect(); const tx=t.clientX-bx.left; if(tx<W/3)keys['ArrowLeft']=true; else if(tx>W*2/3)keys['ArrowRight']=true; else keys[' ']=true;};
+  c.ontouchend=()=>{keys['ArrowLeft']=false;keys['ArrowRight']=false;keys[' ']=false;};
+  if(gameLoop)clearInterval(gameLoop);
+  gameLoop=setInterval(()=>{
+    ctx.fillStyle='#07070f'; ctx.fillRect(0,0,W,H);
+    // stars
+    ctx.fillStyle='rgba(124,111,255,.3)';
+    for(let i=0;i<3;i++){ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+    if(gameOver){
+      ctx.fillStyle='#e8e8f0'; ctx.font='bold 28px Segoe UI'; ctx.textAlign='center';
+      ctx.fillText('GAME OVER',W/2,H/2-20);
+      ctx.font='16px Segoe UI'; ctx.fillStyle='#8888a8';
+      ctx.fillText('Score: '+score,W/2,H/2+15);
+      ctx.fillText('Click Start to play again',W/2,H/2+42);
+      return;
+    }
+    // move player
+    if(keys['ArrowLeft']||keys['a']) px=Math.max(P_W/2,px-pSpeed);
+    if(keys['ArrowRight']||keys['d']) px=Math.min(W-P_W/2,px+pSpeed);
+    if((keys[' ']||keys['ArrowUp'])&&shootCooldown<=0){bullets.push({x:px,y:H-P_H-16});shootCooldown=14;}
+    if(shootCooldown>0)shootCooldown--;
+    // spawn
+    eTimer++;if(eTimer>Math.max(40,90-score/10)){spawnEnemy();eTimer=0;}
+    // bullets
+    bullets=bullets.filter(b=>b.y>-10);
+    bullets.forEach(b=>{b.y-=10;const g=ctx.createLinearGradient(b.x,b.y+12,b.x,b.y-2);g.addColorStop(0,'#7c6fff');g.addColorStop(1,'#f472b6');ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(b.x-2.5,b.y-12,5,12,3);ctx.fill();});
+    // enemies
+    enemies.forEach(e=>{e.y+=e.speed;
+      ctx.fillStyle='rgba(255,60,80,.85)'; ctx.beginPath(); ctx.roundRect(e.x-e.w/2,e.y-e.h/2,e.w,e.h,6); ctx.fill();
+      ctx.fillStyle='rgba(255,200,200,.8)'; ctx.font='bold 11px Segoe UI'; ctx.textAlign='center'; ctx.fillText('👾',e.x,e.y+4);
+      if(e.y>H+10){lives--;document.getElementById('gLives').textContent=lives;e.done=true;if(lives<=0){gameOver=true;}}
+      bullets.forEach(b=>{if(Math.abs(b.x-e.x)<e.w/2+4&&Math.abs(b.y-e.y)<e.h/2+8){e.done=true;b.y=-100;score+=10;document.getElementById('gScore').textContent=score;for(let i=0;i<8;i++)particles2.push({x:e.x,y:e.y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,life:20,c:i%2?'#7c6fff':'#f472b6'});}});
+    });
+    enemies=enemies.filter(e=>!e.done);
+    // particles
+    particles2.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--;ctx.globalAlpha=p.life/20;ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,6.28);ctx.fill();});
+    particles2=particles2.filter(p=>p.life>0); ctx.globalAlpha=1;
+    // draw ship
+    const g=ctx.createLinearGradient(px-P_W/2,0,px+P_W/2,0);g.addColorStop(0,'#7c6fff');g.addColorStop(1,'#f472b6');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.moveTo(px,H-P_H-12); ctx.lineTo(px-P_W/2,H-6); ctx.lineTo(px+P_W/2,H-6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(124,111,255,.3)'; ctx.beginPath(); ctx.ellipse(px,H-8,20,6,0,0,Math.PI*2); ctx.fill();
+    // HUD
+    ctx.fillStyle='#e8e8f0'; ctx.font='bold 13px Segoe UI'; ctx.textAlign='left'; ctx.fillText('Score: '+score,12,22);
+    ctx.textAlign='right'; ctx.fillStyle='#f472b6'; ctx.fillText('♥'.repeat(lives),W-12,22);
+  },1000/60);
+}
+
+window.addEventListener('beforeunload',()=>{if(gameLoop)clearInterval(gameLoop);});
+</script>
+</body>
+</html>
